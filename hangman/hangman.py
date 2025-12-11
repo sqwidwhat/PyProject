@@ -1,58 +1,62 @@
 import random
 from hangman_words import word_list
-from hangman_art import stages
-from hangman_art import logo
+from hangman_art import stages, logo
 
 print(logo)
 
 # memilih kata acak
 chosen_word = random.choice(word_list)
-
-# membuat garis bawah misal 'APEL' jadi '____'
-placeholder = ""
 word_length = len(chosen_word)
-for position in range(word_length):
-    placeholder += "_"
-print(placeholder)
 
 game_over = False
 correct_letters = []
+# Tambahan: List untuk menyimpan SEMUA tebakan (agar tidak kena denda 2x kalau salah nebak huruf yg sama)
+all_guesses = [] 
 lives = 6
+
+# Setup tampilan awal
+print("_" * word_length)
 
 while not game_over:
     guess = input("Guess a letter: ").lower()
 
-    display = ""
+    # 1. CEK DUPLIKAT (Cek di list all_guesses)
+    if guess in all_guesses:
+        print(f"Kamu sudah pernah mencoba huruf '{guess}', coba huruf lain.")
+        continue
+    
+    # Masukkan tebakan ke daftar riwayat
+    all_guesses.append(guess)
 
-    # cek apakah sudah pernah diinput
-    if guess in correct_letters:
-        print(f"Kamu sudah pernah menginput huruf ini {guess}")
-        continue# untuk lanjutkan langsung ke input gues
-
+    # 2. LOGIKA BENAR / SALAH
     if guess in chosen_word:
         correct_letters.append(guess)
-        print(f"Kata yang anda tebak benar dan nyawamu sisa {lives}")
+        print(f"Benar! Nyawamu masih {lives}")
     else:
         lives -= 1
-        print(f"Kamu salah menebak dan nyawamu dikurang satu sisa {lives}")
-        #cek kalah
+        print(f"Salah! Huruf '{guess}' tidak ada. Nyawamu sisa {lives}")
+        
+        # Cek Kalah
         if lives == 0:
             game_over = True
-            print("You lose")
+            print("You lose!")
+            # Memberi tahu kata yang benar saat kalah
+            print(f"Jawabannya adalah: {chosen_word}")
 
-    # update tampilan display
+    # 3. UPDATE TAMPILAN DISPLAY
+    display = ""
     for letter in chosen_word:
         if letter in correct_letters:
             display += letter
         else:
             display += "_"
-
+    
     print(display)
 
-    # cek menang
+    # 4. CEK MENANG
     if "_" not in display:
         game_over = True
-        print("You win")
+        print("You win!")
 
-    # tampilkan gambar
+    # 5. PRINT GAMBAR
     print(stages[lives])
