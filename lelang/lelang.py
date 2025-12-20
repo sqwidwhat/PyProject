@@ -3,31 +3,29 @@ from art import logo
 print(logo)
 
 
-def cari_pemenang_lelang(data_tawaran):
-    tawaran_tertinggi = 0
+def cariPenawaranTertinggi(paraPenawar):
+    penawaranTertinggi = 0
     pemenang = ""
-
-    for peserta in data_tawaran:
-        jumlah_tawaran = data_tawaran[peserta]
-        if jumlah_tawaran > tawaran_tertinggi:
-            tawaran_tertinggi = jumlah_tawaran
+    for peserta in paraPenawar:
+        jumlahPenawaran = paraPenawar[peserta]
+        if jumlahPenawaran > penawaranTertinggi:
+            penawaranTertinggi = jumlahPenawaran
             pemenang = peserta
+    print(f"Pemenangnya adalah {pemenang} dengan tawaran sebesar ${penawaranTertinggi}")
 
-    print(f"Pemenangnya adalah {pemenang} dengan tawaran sebesar ${tawaran_tertinggi}")
 
+tawaran = {}
+lanjutLelang = True
 
-data_lelang = {}
-lanjut_lelang = True
-
-while lanjut_lelang:
-    nama = input("Siapa nama Anda?: ")
-    harga = int(input("Berapa tawaran Anda?: $"))
-    #nambah data dalam dictionary
-    data_lelang[nama] = harga
-
-    lanjut = input("Apakah ada penawar lain? Ketik 'yes' atau 'no'.\n")
-    if lanjut == "no":
-        lanjut_lelang = False
-        cari_pemenang_lelang(data_lelang)
-    elif lanjut == "yes":
+while lanjutLelang:
+    nama = input("Masukan nama anda: ").lower()
+    penawaran = int(input("Masukan jumlah penawaran anda: $"))
+    tawaran[nama] = penawaran
+    jawaban = input("Apakah ada penawaran lain? 'ya' atau 'tidak' ")
+    if jawaban == "tidak":
+        lanjutLelang = False
+        cariPenawaranTertinggi(tawaran)
+    elif jawaban == "ya":
         print("\n" * 5)
+
+print(tawaran)
